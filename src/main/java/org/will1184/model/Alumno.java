@@ -1,17 +1,21 @@
 package org.will1184.model;
 
+//Clase plantilla de un alumno
 public class Alumno {
 
+    //Atributos de la clase
     private static int id;
     private String nombre;
     private String nacionalidad;
 
+    //Constructor que pide como argumentos nombre y la nacionalidad
     public Alumno(String nombre, String nacionalidad) {
         id++;
         this.nombre = nombre;
         this.nacionalidad = nacionalidad;
     }
 
+    //Getter y Setter de los atributos
     public static Integer getId() {
         return id;
     }

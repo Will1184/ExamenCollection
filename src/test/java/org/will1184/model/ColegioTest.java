@@ -8,12 +8,14 @@ import org.will1184.exception.VacioException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+//Clase test de la clase Colegio
 class ColegioTest {
 
     Colegio colegio;
     private TestInfo testInfo;
     private TestReporter testReporter;
 
+    //Metodo que inicia  antes de cada test
     @BeforeEach
     void initMetodoTest(TestInfo testInfo, TestReporter testReporter){
         this.colegio =new Colegio();
@@ -25,30 +27,34 @@ class ColegioTest {
                 +" con las etiquetas "+testInfo.getTags());
     }
 
+    //Metodo que inicia  despues de cada test
     @AfterEach
     void tearDown() {
         System.out.println("Finalizando Metodo");
     }
+    //Metodo que inicia  despues de todos los test
     @AfterAll
     static void afterAll(){
         System.out.println("Test Finalizado");
     }
+    //Metodo que inicia  antes de todos los test
     @BeforeAll
     static void beforeAll(){
         System.out.println("Test Iniciado");
     }
 
 
+    //Metodo que prueba si se agrega alumnos y nacionalidad a alumnoList
     @Test
     @Tag("colegio")
     void testAddAlumno(){
         colegio.addAlumno("MEXICANA");
         colegio.addAlumno("ARGENTINA");
         long esperado=2;
-        long actual= colegio.nacionalidades.size();
+        long actual= colegio.alumnosList.size();
         assertEquals(esperado,actual);
-
     }
+
 
     @Test
     @Tag("colegio")
@@ -63,6 +69,7 @@ class ColegioTest {
 
     }
 
+    //Metodo que prueba la cantidad de nacionalidades que hay
     @Test
     @Tag("colegio")
     void testCuantos() {
@@ -73,16 +80,17 @@ class ColegioTest {
         assertEquals(esperados,actual);
     }
 
+    //Test que prueba si se borra correctamente alumnosList
     @Test
     @Tag("colegio")
     void testBorrar() {
         colegio.addAlumno("MEXICANA");
         colegio.addAlumno("ARGENTINA");
         colegio.borrar();
-        assertTrue(colegio.nacionalidades.isEmpty());
+        assertTrue(colegio.alumnosList.isEmpty());
     }
 
-
+    //Test que prueba 8i se lanza corectamente la excepcion VacioException
     @Test
     @Tag("colegio")
     @Tag("error")
@@ -93,10 +101,13 @@ class ColegioTest {
         assertEquals(esperado,actual);
     }
 
+
+    //Test Parametrizadas
     @Tag("param")
     @Nested
     class PruebasParameterizedTest{
 
+        //Pruebas para verificar que no acepte datos vacios
         @ParameterizedTest(name = "numero {index} ejecutando con valor {0} - {argumentsWithNames}")
         @ValueSource(strings = {"espaniol", "mexicano","hondurenio","",})
         @Tag("colegio")
@@ -104,6 +115,7 @@ class ColegioTest {
             assertFalse(nacionalidad.isBlank(),"La nacionalidad no debe ser null ni estar vacio");
         }
 
+        //Pruebas para verificar que la nacinalidad este en mayusculas
         @ParameterizedTest(name = "numero {index} ejecutando con valor {0} - {argumentsWithNames}")
         @ValueSource(strings = {"espaniol", "mexicano","HONDURENIO"})
         @Tag("colegio")
@@ -112,7 +124,7 @@ class ColegioTest {
             assertTrue(upperCase,"Nacionalidad debe estar en mayuscula");
         }
     }
-
+//Metodo que permite verificar si un String esat en mayuscula
     public static boolean isUpperCase(String nacionalidad){
         for (int i=0; i<nacionalidad.length();i++){
             if (Character.isUpperCase(nacionalidad.charAt(i))){
