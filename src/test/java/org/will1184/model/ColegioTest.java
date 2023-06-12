@@ -6,6 +6,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.will1184.exception.VacioException;
 
 
+import java.util.Objects;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 //Clase test de la clase Colegio
@@ -23,7 +25,7 @@ class ColegioTest {
         this.testReporter = testReporter;
         System.out.println("Iniciando  metodo");
         testReporter.publishEntry("Ejecutando: "+ testInfo.getDisplayName()
-                + " "+testInfo.getTestMethod().orElse(null).getName()
+                + " "+ Objects.requireNonNull(testInfo.getTestMethod().orElse(null)).getName()
                 +" con las etiquetas "+testInfo.getTags());
     }
 
@@ -44,7 +46,7 @@ class ColegioTest {
     }
 
 
-    //Metodo que prueba si se agrega alumnos y nacionalidad a alumnoList
+    //Test que prueba si se agrega alumnos y nacionalidad a alumnoList
     @Test
     @Tag("colegio")
     void testAddAlumno(){
@@ -55,7 +57,33 @@ class ColegioTest {
         assertEquals(esperado,actual);
     }
 
+    //Test que prueba si se lanza corectamente la excepcion VacioException
+    @Test
+    @Tag("colegio")
+    @Tag("error")
+    void testVacioExceptionAddAlumnoT(){
+        Exception exception = assertThrows(VacioException.class,() -> colegio.addAlumno(""));
+        String actual = exception.getMessage();
+        String esperado = "Nacionalidad no debe estar vacio";
+        assertEquals(esperado,actual);
+    }
 
+    //Test que prueba si el objeto recibido son del mismo tipo de objeto que el esperado en el metodo addAlumno
+    @Test
+    @Tag("colegio")
+    void testAddAlumnoSameObject(){
+        String actual="ESPANIOLA";
+        String esperado="ESPANIOLA";
+        assertSame(esperado,actual);
+    }
+    //Test que prueba si el objeto recibido no es del mismo tipo de objeto que el esperado en el metodo addAlumno
+    @Test
+    @Tag("colegio")
+    void testAddAlumnoNotSameObject(){
+        Long actual=5L;
+        String esperado="ESPANIOLA";
+        assertNotSame(esperado,actual);
+    }
     @Test
     @Tag("colegio")
     void testShowAll() {
@@ -63,13 +91,18 @@ class ColegioTest {
 
     }
 
+    //Test que prueba si se lanza corectamente la excepcion VacioException en el metodo showNacionalidad
     @Test
     @Tag("colegio")
-    void testShowNacionalidad() {
-
+    @Tag("error")
+    void testVacioExceptionShowNacionalidad() {
+        Exception exception = assertThrows(VacioException.class,() -> colegio.showNacionalidad(""));
+        String actual = exception.getMessage();
+        String esperado = "Nacionalidad no debe estar vacio";
+        assertEquals(esperado,actual);
     }
 
-    //Metodo que prueba la cantidad de nacionalidades que hay
+    //Test que prueba la cantidad de nacionalidades que hay
     @Test
     @Tag("colegio")
     void testCuantos() {
@@ -80,7 +113,31 @@ class ColegioTest {
         assertEquals(esperados,actual);
     }
 
-    //Test que prueba si se borra correctamente alumnosList
+    //Test que prueba si se borra correctamente el alumno de alumnosList en el metodo borrarId
+    @Test
+    @Tag("colegio")
+    void testBorrarId() {
+        colegio.addAlumno("MEXICANA");
+        colegio.addAlumno("ARGENTINA");
+        int id=1;
+        colegio.borrarId(id);
+        int alumnos= colegio.alumnosList.size();
+        assertSame(1,id);
+        assertEquals(1,alumnos);
+    }
+
+    //Test que prueba si el objeto recibido no es del mismo tipo de objeto que el esperado en el metodo borrarId
+    @Test
+    @Tag("colegio")
+    void testBorrarIdNotSameObject() {
+        colegio.addAlumno("MEXICANA");
+        colegio.addAlumno("ARGENTINA");
+        Long id=1L;
+        colegio.borrarId(Math.toIntExact(id));
+        assertSame(1,id,"No son el mismo tipo de datos");
+    }
+
+    //Test que prueba si se borra correctamente alumnosList en el metodoBorrar
     @Test
     @Tag("colegio")
     void testBorrar() {
@@ -88,17 +145,6 @@ class ColegioTest {
         colegio.addAlumno("ARGENTINA");
         colegio.borrar();
         assertTrue(colegio.alumnosList.isEmpty());
-    }
-
-    //Test que prueba 8i se lanza corectamente la excepcion VacioException
-    @Test
-    @Tag("colegio")
-    @Tag("error")
-    void testVacioException(){
-        Exception exception = assertThrows(VacioException.class,() -> colegio.addAlumno(""));
-        String actual = exception.getMessage();
-        String esperado = "Nacionalidad no debe estar vacio";
-        assertEquals(esperado,actual);
     }
 
 
@@ -111,6 +157,7 @@ class ColegioTest {
         @ParameterizedTest(name = "numero {index} ejecutando con valor {0} - {argumentsWithNames}")
         @ValueSource(strings = {"espaniol", "mexicano","hondurenio","",})
         @Tag("colegio")
+        @Tag("error")
         void testNacionalidadNotEmpty(String nacionalidad) {
             assertFalse(nacionalidad.isBlank(),"La nacionalidad no debe ser null ni estar vacio");
         }
@@ -119,12 +166,13 @@ class ColegioTest {
         @ParameterizedTest(name = "numero {index} ejecutando con valor {0} - {argumentsWithNames}")
         @ValueSource(strings = {"espaniol", "mexicano","HONDURENIO"})
         @Tag("colegio")
+        @Tag("error")
         void testNacionalidadToUpperCase(String nacionalidad) {
             boolean upperCase=isUpperCase(nacionalidad);
             assertTrue(upperCase,"Nacionalidad debe estar en mayuscula");
         }
     }
-//Metodo que permite verificar si un String esat en mayuscula
+//Metodo que permite verificar si un String esta en mayuscula
     public static boolean isUpperCase(String nacionalidad){
         for (int i=0; i<nacionalidad.length();i++){
             if (Character.isUpperCase(nacionalidad.charAt(i))){

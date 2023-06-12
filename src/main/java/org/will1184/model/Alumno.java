@@ -4,24 +4,28 @@ package org.will1184.model;
 public class Alumno {
 
     //Atributos de la clase
-    private static int id;
+    private static int count = -1;
+    private Integer id;
     private String nombre;
     private String nacionalidad;
 
     //Constructor que pide como argumentos nombre y la nacionalidad
     public Alumno(String nombre, String nacionalidad) {
-        id++;
         this.nombre = nombre;
         this.nacionalidad = nacionalidad;
+        count++;
+        id = count;
     }
 
     //Getter y Setter de los atributos
-    public static Integer getId() {
+
+
+    public Integer getId() {
         return id;
     }
 
-    public static void setId(Integer id) {
-        Alumno.id = id;
+    public void setId() {
+        this.id++;
     }
 
     public String getNombre() {
@@ -42,7 +46,7 @@ public class Alumno {
 
     @Override
     public String toString() {
-        return "nombre: " + nombre +
-                ", nacionalidad: " + nacionalidad;
+        return "Id: "+ id+" Nombre: " + nombre +
+                ", Nacionalidad: " + nacionalidad;
     }
 }
