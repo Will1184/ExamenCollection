@@ -1,6 +1,7 @@
 package org.will1184.model;
 
 import org.will1184.exception.VacioException;
+import org.will1184.repository.IColegio;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 //Clase plantilla que contiene alumnos
-public class Colegio{
+public class Colegio implements IColegio {
     //Lista de tipo  Alumno
     List<Alumno> alumnosList;
 
