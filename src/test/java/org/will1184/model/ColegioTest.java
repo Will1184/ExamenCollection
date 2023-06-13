@@ -68,27 +68,9 @@ class ColegioTest {
         assertEquals(esperado,actual);
     }
 
-    //Test que prueba si el objeto recibido son del mismo tipo de objeto que el esperado en el metodo addAlumno
-    @Test
-    @Tag("colegio")
-    void testAddAlumnoSameObject(){
-        String actual="ESPANIOLA";
-        String esperado="ESPANIOLA";
-        assertSame(esperado,actual);
-    }
-    //Test que prueba si el objeto recibido no es del mismo tipo de objeto que el esperado en el metodo addAlumno
-    @Test
-    @Tag("colegio")
-    void testAddAlumnoNotSameObject(){
-        Long actual=5L;
-        String esperado="ESPANIOLA";
-        assertNotSame(esperado,actual);
-    }
     @Test
     @Tag("colegio")
     void testShowAll() {
-
-
     }
 
     //Test que prueba si se lanza corectamente la excepcion VacioException en el metodo showNacionalidad
@@ -146,7 +128,6 @@ class ColegioTest {
         colegio.borrar();
         assertTrue(colegio.alumnosList.isEmpty());
     }
-
 
     //Test Parametrizadas
     @Tag("param")

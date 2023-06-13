@@ -1,6 +1,6 @@
 package org.will1184.model;
 
-import org.will1184.exception.IdException;
+
 import org.will1184.exception.VacioException;
 import org.will1184.repository.IColegio;
 
@@ -11,13 +11,36 @@ import java.util.Map;
 
 //Clase plantilla que contiene alumnos
 public class Colegio implements IColegio {
+    private String nombreColegio;
+    private int id;
+    private static int count=0;
+
     //Lista de tipo  Alumno
-    List<Alumno> alumnosList;
+    protected List<Alumno> alumnosList;
 
     //Constructor que no pide argumentos e inicializa alumnosList como ArrayList
     public Colegio() {
         alumnosList= new ArrayList<>();
+        count++;
+        id = count;
     }
+
+    public String getNombreColegio() {
+        return nombreColegio;
+    }
+
+    public void setNombreColegio(String nombreColegio) {
+        this.nombreColegio = nombreColegio;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
 
     //Metodo que pide un objeto de tipo String, da la nacionalidad un alumno y lo almacena en alumnosList
     //La nacionalidad no debe ser vacia ni null sino lanzara una exception de tipo VacioException
@@ -35,15 +58,21 @@ public class Colegio implements IColegio {
     //Metodo que muestra cuales son las nacionalidades que existen y cauntos alumnos tienen  la misma nacionalidad
     public void ShowAll(){
         System.out.println("========Metodo ShowAll========");
-
-        System.out.println("Cuales son las naciones que existen? ");
-        Map <String,Integer> naciones = new HashMap<>();
-        alumnosList.forEach(alumno -> naciones.put(alumno.getNacionalidad()
-                ,naciones.getOrDefault(alumno.getNacionalidad(),0)+1)
-                );
-        for (Object k:naciones.keySet()) {
-            System.out.println("Cantidad de alumnos con la nacionalidad: "
-                    +k+" es de: "+ naciones.get(k.toString()));
+        if (alumnosList.isEmpty()){
+            System.out.println("No existen datos");
+        }else {
+            System.out.println("El colegio "+nombreColegio+" tiene en el registro a estos alumnos");
+            alumnosList.forEach(System.out::println);
+            System.out.println("\nCuales son las naciones que existen " +
+                    "y cuantos alumnos hay de cada nacionalidad? ");
+            Map <String,Integer> naciones = new HashMap<>();
+            alumnosList.forEach(alumno -> naciones.put(alumno.getNacionalidad()
+                    ,naciones.getOrDefault(alumno.getNacionalidad(),0)+1)
+            );
+            for (Object k:naciones.keySet()) {
+                System.out.println("Cantidad de alumnos con la nacionalidad: "
+                        +k+" es de: "+ naciones.get(k.toString()));
+            }
         }
 
     }
@@ -79,6 +108,20 @@ public class Colegio implements IColegio {
         }
         return naciones;
     }
+    //Metodo que borra los datos de alumnosList
+    public void borrar(){
+        System.out.println("\n==========Metodo borrar===========");
+        alumnosList.forEach(System.out::println);
+        int id=1;
+        if (id<0){
+            throw new RuntimeException("Id deber ser igual o mayor a cero");
+        }
+
+        alumnosList.remove(id);
+        System.out.println("\nId: "+ id+" Eliminado \n");
+        alumnosList.forEach(System.out::println);
+
+    }
 
     //Metodo que borra los datos de alumnosList
     public void borrarId(int id){
@@ -86,7 +129,7 @@ public class Colegio implements IColegio {
         alumnosList.forEach(System.out::println);
 
         if (id<0){
-                throw new IdException("Id deber ser igual o mayor a cero");
+                throw new RuntimeException("Id deber ser igual o mayor a cero");
         }
 
         alumnosList.remove(id);
@@ -95,7 +138,7 @@ public class Colegio implements IColegio {
 
     }
     //Metodo que borra los datos de alumnosList
-    public void borrar(){
+    public void borrarRegistros(){
         System.out.println("\n======Metodo borrar Toda la lista==========");
         System.out.println("Las nacionalidades esta vacio?: "+alumnosList.isEmpty());
         alumnosList.clear();
